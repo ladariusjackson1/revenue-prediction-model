@@ -1,0 +1,7 @@
+transaction_id,client_name,gross_revenue,region,is_recurring
+T101,Double Eagle Client A,4500,South,True
+T102,Apex Logistics,7200,Midwest,False
+T103,Alpha Corp,,South,True
+T104,Delta Systems,3100,East,False
+T101,Double Eagle Client A,4500,South,True
+T105,Omega Holdings,8900,West,True
