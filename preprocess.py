@@ -1,41 +1,70 @@
-import pandas as pd
+"""Preprocessing walkthrough for the quarterly revenue sample dataset.
+
+This is a standalone teaching pipeline. Its sample data has different columns
+than mock_revenue_data.csv (which drives train.py), so it stays self-contained.
+"""
+
 import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-print("🚀 Data engineering pipeline initialized successfully!")
+TARGET_COLUMN = "quarterly_revenue"
+CATEGORICAL_COLUMNS = ["region"]
+NUMERIC_COLUMNS = ["advertising_spend", "active_customers"]
+TEST_SIZE = 0.2
+RANDOM_STATE = 42
 
-# 1. Simulating our raw financial dataset for Double Eagle Financial LLC
-raw_data = {
-    'advertising_spend': [1200, 1500, np.nan, 2100, 1800, 2500, 1500, 2900],
-    'active_customers': [45, 50, 48, 65, np.nan, 80, 50, 95],
-    'region': ['North', 'South', 'North', 'West', 'South', 'West', 'North', 'South'],
-    'quarterly_revenue': [15000, 18500, 16000, 24000, 21000, 29000, 18500, 34000]
+# Sample dataset for Double Eagle Financial LLC.
+SAMPLE_DATA = {
+    "advertising_spend": [1200, 1500, np.nan, 2100, 1800, 2500, 1500, 2900],
+    "active_customers": [45, 50, 48, 65, np.nan, 80, 50, 95],
+    "region": ["North", "South", "North", "West", "South", "West", "North", "South"],
+    "quarterly_revenue": [15000, 18500, 16000, 24000, 21000, 29000, 18500, 34000],
 }
 
-df = pd.DataFrame(raw_data)
-print("\n--- Raw Ingested Data Matrix ---")
-print(df)
 
-# 2. Imputing Missing Values (Filling NaN gaps with the column average)
-df['advertising_spend'] = df['advertising_spend'].fillna(df['advertising_spend'].mean())
-df['active_customers'] = df['active_customers'].fillna(df['active_customers'].mean())
+def build_features(df: pd.DataFrame) -> pd.DataFrame:
+    """One-hot encode categoricals and split off the target."""
+    encoded = pd.get_dummies(df, columns=CATEGORICAL_COLUMNS, drop_first=True)
+    return encoded.drop(columns=[TARGET_COLUMN])
 
-# 3. Categorical One-Hot Encoding (Converting text regions to numbers)
-df = pd.get_dummies(df, columns=['region'], drop_first=True)
 
-# 4. Splitting Independent Features (X) from the Target Output (y)
-X = df.drop(columns=['quarterly_revenue'])
-y = df['quarterly_revenue']
+def preprocess(df: pd.DataFrame):
+    """Split first, then fit imputation and scaling on the training rows only.
 
-# 5. Standardizing and Scaling Matrix Features
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+    Ordering matters: the previous version imputed and scaled the full dataset
+    before splitting, which leaked test-set statistics into the training data.
+    """
+    X = build_features(df)
+    y = df[TARGET_COLUMN]
 
-# 6. Building the 80/20 Train-Test Split Vault
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=TEST_SIZE, random_state=RANDOM_STATE
+    )
 
-print("\n--- Data Preprocessing Pipeline Metrics ---")
-print(f"Total training input rows (X_train shape): {X_train.shape}")
-print(f"Total testing evaluation rows (X_test shape): {X_test.shape}")
-print("🏁 Pipeline complete. Data vaults are locked and ready for modeling!")
+    # NOTE: the README describes median imputation but this has always used the
+    # mean. Left as mean to preserve behaviour -- confirm which is intended.
+    fill_values = X_train[NUMERIC_COLUMNS].mean()
+    X_train = X_train.fillna(fill_values)
+    X_test = X_test.fillna(fill_values)
+
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)  # transform only, never refit
+
+    return X_train_scaled, X_test_scaled, y_train, y_test, scaler
+
+
+if __name__ == "__main__":
+    print("Data engineering pipeline initialized.")
+    frame = pd.DataFrame(SAMPLE_DATA)
+    print("\n--- Raw Ingested Data ---")
+    print(frame)
+
+    X_train, X_test, y_train, y_test, _ = preprocess(frame)
+
+    print("\n--- Preprocessing Metrics ---")
+    print(f"Training input rows (X_train shape): {X_train.shape}")
+    print(f"Testing evaluation rows (X_test shape): {X_test.shape}")
+    print("Pipeline complete.")
