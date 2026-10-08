@@ -1,7 +1,11 @@
 .venv/
 __pycache__/
+.pytest_cache/
 .DS_Store
 .vscode/
 .gemini/
+.ipynb_checkpoints/
 app_logs.db
 models/*.pkl
+models/*.joblib
+data/raw/

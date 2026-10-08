@@ -1,53 +1,49 @@
-"""Fit the revenue prediction model and save it to models/."""
+"""Fit the daily sales models and save the validation winner."""
 
-import joblib
-from sklearn.linear_model import Ridge
-from sklearn.metrics import mean_absolute_error, root_mean_squared_error
+import sys
+from pathlib import Path
 
-from revenue_model import (
-    FEATURE_COLUMNS,
+ROOT = Path(__file__).resolve().parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.forecast import (
+    DISPLAY_NAMES,
+    METRICS_PATH,
     MODEL_PATH,
-    RIDGE_ALPHA,
-    MissingColumnsError,
-    load_training_frame,
-    training_target,
+    format_metrics_table,
+    train_and_save,
 )
 
 
-def train() -> Ridge:
-    print("Initiating Machine Learning Training Pipeline...")
-
-    # Loads, de-duplicates, validates columns, and drops rows with missing
-    # features. Raises MissingColumnsError with a readable message rather than
-    # a bare KeyError when the CSV lacks a feature column.
-    df = load_training_frame()
-    print(f"   - Training rows after de-duplication and NA drop: {len(df)}")
-
-    X = df[FEATURE_COLUMNS]
-    y = training_target(df["gross_revenue"], df["is_recurring"])
-
-    model = Ridge(alpha=RIDGE_ALPHA)
-    model.fit(X, y)
-
-    print("Model Training Complete.")
-    for name, coefficient in zip(FEATURE_COLUMNS, model.coef_):
-        print(f"   - {name} coefficient: {coefficient:.4f}")
-
-    # Fit quality on the training rows themselves. The target is a closed-form
-    # formula, so these errors should be near zero; a large value means the
-    # feature columns and the target formula have drifted apart.
-    predictions = model.predict(X)
-    print(f"   - In-sample MAE:  ${mean_absolute_error(y, predictions):,.2f}")
-    print(f"   - In-sample RMSE: ${root_mean_squared_error(y, predictions):,.2f}")
-
-    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump(model, MODEL_PATH)
-    print(f"Saved trained model to '{MODEL_PATH}'")
-    return model
+def train() -> dict:
+    print("Training daily net-sales models...")
+    payload = train_and_save()
+    print(
+        f"Calendar days: {payload['n_calendar_days']:,} | "
+        f"Modeled days: {payload['n_modeled_rows']:,}"
+    )
+    for name, period in payload["periods"].items():
+        print(
+            f"  {name:12} {period['rows']:4} days  "
+            f"{period['start']} to {period['end']}"
+        )
+    print("\nValidation scores (fit on the training window only; used to pick the model)")
+    print(format_metrics_table(payload["validation"]))
+    print("\nTest scores (refit on training + validation; not used to pick the model)")
+    print(format_metrics_table(payload["test"]))
+    selected = payload["selected_model"]
+    print(
+        f"\nSelected on validation MAE: {DISPLAY_NAMES[selected]} "
+        f"(trained through {payload['trained_through']})"
+    )
+    print(f"Saved model to {MODEL_PATH}")
+    print(f"Saved metrics to {METRICS_PATH}")
+    return payload
 
 
 if __name__ == "__main__":
     try:
         train()
-    except (FileNotFoundError, MissingColumnsError) as error:
-        raise SystemExit(f"Training aborted: {error}")
+    except (FileNotFoundError, ValueError) as error:
+        raise SystemExit(f"Training aborted: {error}") from error

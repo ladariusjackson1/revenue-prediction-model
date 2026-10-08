@@ -1,211 +1,131 @@
-import sqlite3
-from contextlib import closing
+"""Streamlit app that forecasts one day with the model saved by train.py."""
 
-import joblib
+import json
+import sys
+from pathlib import Path
+
 import pandas as pd
 import streamlit as st
-from sklearn.linear_model import Ridge
-from sqlalchemy import create_engine
 
-from revenue_model import (
-    APP_GROWTH_RATE,
+ROOT = Path(__file__).resolve().parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.forecast import (
+    DATA_PATH,
+    DISPLAY_NAMES,
     FEATURE_COLUMNS,
-    LOG_DB_PATH,
-    MIN_ROWS_TO_RETRAIN,
+    HISTORY_DAYS,
+    METRICS_PATH,
     MODEL_PATH,
-    app_forecast,
-    require_columns,
+    add_features,
+    features_from_history,
+    load_daily_revenue,
+    load_model,
+    predict_revenue,
 )
 
-LOG_TABLE = "user_inputs"
-UPLOAD_PREVIEW_COLUMNS = ["transaction_id", "gross_revenue", "Predicted_Future_Revenue"]
-LOG_COLUMNS = ["transaction_id", *FEATURE_COLUMNS, "Predicted_Future_Revenue", "actual_revenue"]
 
-# --- DATABASE LAYER ---
-# create_engine returns a real connectable; the previous code passed a bare
-# connection-string to pandas and only worked because SQLAlchemy was installed.
-engine = create_engine(f"sqlite:///{LOG_DB_PATH}")
-
-
-# --- RETRAINING FUNCTION ---
-def retrain_from_verified_logs():
-    """Refit on logged rows that have a verified actual_revenue.
-
-    Returns (row_count, error_message). The previously fitted model was
-    discarded without being saved; it is now persisted to MODEL_PATH.
-    """
-    if not LOG_DB_PATH.exists():
-        return 0, None
-
-    try:
-        logged = pd.read_sql(LOG_TABLE, con=engine)
-    except (ValueError, sqlite3.DatabaseError) as error:
-        # Previously a bare `except Exception: pass`, which made a corrupt
-        # database indistinguishable from an empty one.
-        return 0, str(error)
-
-    if "actual_revenue" not in logged.columns:
-        return 0, None
-
-    verified = logged.dropna(subset=["actual_revenue"])
-    if len(verified) < MIN_ROWS_TO_RETRAIN:
-        return 0, None
-
-    try:
-        require_columns(verified, FEATURE_COLUMNS, source="log database")
-    except ValueError as error:
-        return 0, str(error)
-
-    model = Ridge()
-    model.fit(verified[FEATURE_COLUMNS], verified["actual_revenue"])
-    MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump(model, MODEL_PATH)
-    return len(verified), None
-
-
-def log_rows(rows: pd.DataFrame) -> None:
-    """Append rows to the log table using a stable column order."""
-    rows.reindex(columns=LOG_COLUMNS).to_sql(
-        LOG_TABLE, con=engine, if_exists="append", index=False
-    )
-
-
-st.set_page_config(page_title="Revenue Forecasting", layout="wide")
-st.title("Revenue Forecasting Engine")
-st.write("Log transactions, forecast revenue, and refit the model on verified outcomes.")
-
-# --- SIDEBAR STATUS MONITOR ---
-with st.sidebar:
-    st.header("System Status")
-
-    trained_rows, retrain_error = retrain_from_verified_logs()
-    if retrain_error:
-        st.error(f"Could not read the log database: {retrain_error}")
-    elif trained_rows:
-        st.info(f"Model refit and saved using {trained_rows} verified records.")
-    else:
-        st.warning(
-            f"Awaiting data: need at least {MIN_ROWS_TO_RETRAIN} rows with a "
-            "verified actual_revenue before refitting."
-        )
-
-    # Stated plainly because it is easy to miss: the numbers on screen come from
-    # the configured growth rate, not from the saved model.
-    st.caption(
-        f"Displayed forecasts use the configured growth rate "
-        f"({APP_GROWTH_RATE:.2f}x), not the saved model."
-    )
-
-# --- MAIN INTERFACE BLOCKS ---
-col1, col2 = st.columns([1, 2])
-
-with col1:
-    st.subheader("Live Estimation Inputs")
-    transaction_id = st.text_input("Transaction/Client ID", "T115")
-    gross_revenue = st.slider("Gross Revenue ($)", 1000.0, 15000.0, 5000.0, step=100.0)
-    is_recurring = st.selectbox(
-        "Is Recurring?", [1, 0], format_func=lambda flag: "Yes" if flag == 1 else "No"
-    )
-    prev_revenue_lag1 = st.slider(
-        "Previous Lag Revenue ($)", 1000.0, 15000.0, 4500.0, step=100.0
-    )
-
-    forecast = app_forecast(gross_revenue)
-    st.metric(label="Forecasted Revenue", value=f"${forecast:,.2f}")
-
-    if st.button("Commit Log to Database"):
-        log_rows(
-            pd.DataFrame(
-                [
-                    {
-                        "transaction_id": transaction_id,
-                        "gross_revenue": gross_revenue,
-                        "is_recurring": is_recurring,
-                        "prev_revenue_lag1": prev_revenue_lag1,
-                        "Predicted_Future_Revenue": forecast,
-                        "actual_revenue": None,
-                    }
-                ]
-            )
-        )
-        st.success("Transaction logged.")
-        st.rerun()
-
-with col2:
-    st.subheader("Bulk Spreadsheet Processing")
-    uploaded_file = st.file_uploader(
-        "Drop your raw transaction CSV or Excel file here:", type=["csv", "xlsx"]
-    )
-
-    if uploaded_file is not None:
-        # Guard against re-ingesting the same upload. The old code called
-        # st.rerun() inside this block, so every rerun re-appended the whole
-        # file to the database in an endless loop.
-        upload_key = (uploaded_file.name, uploaded_file.size)
-        already_ingested = st.session_state.get("last_upload") == upload_key
-
-        try:
-            if uploaded_file.name.endswith(".csv"):
-                user_df = pd.read_csv(uploaded_file)
-            else:
-                user_df = pd.read_excel(uploaded_file)  # needs openpyxl
-        except (ValueError, ImportError, pd.errors.ParserError) as error:
-            user_df = None
-            st.error(f"Could not read that file: {error}")
-
-        if user_df is not None:
-            try:
-                # Validate every column used below, not just gross_revenue.
-                require_columns(
-                    user_df, ["transaction_id", *FEATURE_COLUMNS], source=uploaded_file.name
-                )
-            except ValueError as error:
-                st.error(str(error))
-            else:
-                user_df["Predicted_Future_Revenue"] = app_forecast(user_df["gross_revenue"])
-                if "actual_revenue" not in user_df.columns:
-                    user_df["actual_revenue"] = None
-
-                st.write("### Forecast Preview")
-                st.dataframe(user_df[UPLOAD_PREVIEW_COLUMNS].head())
-
-                if already_ingested:
-                    st.info("This file has already been logged.")
-                else:
-                    log_rows(user_df)
-                    st.session_state["last_upload"] = upload_key
-                    st.success(f"Logged {len(user_df)} rows.")
-
-st.markdown("---")
-
-# --- FEEDBACK LAYER ---
-st.subheader("Submit Real-World Outcome")
+st.set_page_config(page_title="Daily sales forecast", layout="wide")
+st.title("Daily sales forecast")
 st.write(
-    "Logging verified revenue lets the sidebar refit the saved model on reload."
+    "Forecasts one day of net merchandise sales (GBP) for the UCI Online Retail "
+    "series. The number is the saved model's prediction, using only earlier days."
 )
 
-f_col1, f_col2 = st.columns(2)
-with f_col1:
-    target_id = st.text_input("Enter Transaction ID to Update:", "")
-with f_col2:
-    actual_revenue = st.number_input(
-        "Enter Real-World Actual Revenue Earned ($):", min_value=0.0, step=100.0
+if not MODEL_PATH.exists() or not METRICS_PATH.exists():
+    st.warning("No saved model yet. From the repository root, run `python train.py`.")
+    st.stop()
+
+payload = load_model(MODEL_PATH)
+metrics = json.loads(METRICS_PATH.read_text())
+model_name = payload["model_name"]
+trained_through = pd.Timestamp(payload["trained_through"])
+
+st.subheader("Held-out test scores")
+st.caption(
+    "Models were refit on every day through "
+    f"{trained_through.date()} and scored on later days. "
+    f"The saved model is {DISPLAY_NAMES[model_name]}, "
+    "chosen by validation MAE before this window was scored."
+)
+test_rows = []
+for name, scores in metrics["test"].items():
+    test_rows.append(
+        {
+            "Model": DISPLAY_NAMES[name],
+            "MAE (GBP)": f"{scores['mae']:,.2f}",
+            "RMSE (GBP)": f"{scores['rmse']:,.2f}",
+            "R²": f"{scores['r2']:.4f}",
+            "Saved model": "yes" if name == model_name else "",
+        }
+    )
+st.dataframe(pd.DataFrame(test_rows), hide_index=True)
+
+daily = load_daily_revenue(DATA_PATH)
+st.subheader("Daily net sales")
+chart = daily.set_index("date")["revenue"]
+st.line_chart(chart)
+
+st.subheader("Forecast one day")
+featured_dates = add_features(daily)["date"]
+next_day = daily["date"].max() + pd.Timedelta(days=1)
+options = list(featured_dates) + [next_day]
+labels = [day.strftime("%Y-%m-%d") for day in options]
+default_index = labels.index(daily["date"].max().strftime("%Y-%m-%d"))
+choice = st.selectbox("Date to forecast", labels, index=default_index)
+forecast_day = pd.Timestamp(choice)
+
+custom = st.text_area(
+    f"Optional history: {HISTORY_DAYS} daily sales amounts for the calendar days "
+    "before this date, oldest first. Leave this blank to use the public series.",
+    placeholder="One number per line",
+)
+
+prior = daily.loc[daily["date"] < forecast_day].tail(HISTORY_DAYS)
+if custom.strip():
+    try:
+        history = [float(piece) for piece in custom.split()]
+    except ValueError:
+        st.error("History must be numbers separated by spaces or new lines.")
+        st.stop()
+else:
+    history = prior["revenue"].tolist()
+
+if len(history) < HISTORY_DAYS:
+    st.error(
+        f"Need {HISTORY_DAYS} days before {forecast_day.date()}. "
+        "This date is too early in the series, or the pasted history is short."
+    )
+    st.stop()
+
+if forecast_day <= trained_through:
+    st.info(
+        "This date is on or before the last training day "
+        f"({trained_through.date()}), so the forecast is in-sample."
+    )
+else:
+    st.info(
+        "This date is after the last training day "
+        f"({trained_through.date()}). It was not used to fit the saved model."
     )
 
-if st.button("Submit Actual Revenue"):
-    if not target_id.strip():
-        st.warning("Enter a transaction ID first.")
-    else:
-        # `with sqlite3.connect(...)` commits but does not close, so wrap in closing().
-        with closing(sqlite3.connect(LOG_DB_PATH)) as connection, connection:
-            cursor = connection.execute(
-                f"UPDATE {LOG_TABLE} SET actual_revenue = ? WHERE transaction_id = ?",
-                (actual_revenue, target_id.strip()),
-            )
-            updated_rows = cursor.rowcount
-        # Previously reported success even when no row matched.
-        if updated_rows:
-            st.success(f"Updated {updated_rows} row(s) for {target_id}.")
-            st.rerun()
-        else:
-            st.warning(f"No logged transaction found with ID '{target_id}'.")
+try:
+    feature_row = features_from_history(history, forecast_day)
+    forecast = predict_revenue(payload["model"], history, forecast_day)
+except (ValueError, FileNotFoundError) as error:
+    st.error(str(error))
+    st.stop()
+
+st.metric("Model forecast", f"£{forecast:,.2f}")
+actual = daily.loc[daily["date"] == forecast_day, "revenue"]
+if not actual.empty:
+    st.metric("Actual net sales that day", f"£{float(actual.iloc[0]):,.2f}")
+    st.caption("The actual amount is shown for comparison. It is not a model input.")
+
+with st.expander("Features passed to the model"):
+    st.dataframe(feature_row[FEATURE_COLUMNS], hide_index=True)
+    st.caption(
+        "lag_1, lag_7, and lag_14 are earlier days. The rolling means use only "
+        "days before the forecast date. day_of_week uses Monday = 0."
+    )
