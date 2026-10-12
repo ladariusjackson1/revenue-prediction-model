@@ -41,11 +41,12 @@ export function CompanyRevenueChart({ data }: { data: CompanyPoint[] }) {
           <YAxis
             type="category"
             dataKey="company"
-            width={112}
+            width={128}
             tick={{ fill: "#0b1f2a", fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />
+
           <Tooltip
             cursor={{ fill: "rgba(13,138,106,0.08)" }}
             contentStyle={tooltipStyle}

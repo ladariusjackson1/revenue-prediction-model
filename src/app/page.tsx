@@ -137,7 +137,7 @@ export default function DashboardPage() {
             Top 20 by revenue
           </h2>
           <p className="mt-1 mb-3 text-sm text-[var(--ink-soft)]">
-            Walmart leads at {formatBillions(top20[0].revenueMillions, 0)}.
+            Walmart leads at {formatBillions(top20[0].revenueMillions)}.
           </p>
           <CompanyRevenueChart data={companyChart} />
         </article>
