@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #0b1f2a;
+  --ink-soft: #3a5563;
+  --paper: #e7eef3;
+  --panel: rgba(255, 255, 255, 0.78);
+  --line: rgba(11, 31, 42, 0.12);
+  --accent: #0d8a6a;
+  --accent-deep: #075a46;
+  --signal: #d97706;
+  --muted: #6b7f8a;
+  --chart-1: #0d8a6a;
+  --chart-2: #1f6f8b;
+  --chart-3: #d97706;
+  --chart-4: #45617a;
+  --background: var(--paper);
+  --foreground: var(--ink);
+}
+
+body {
+  color: var(--foreground);
+  background:
+    radial-gradient(1000px 520px at 8% -8%, rgba(13, 138, 106, 0.18), transparent 55%),
+    radial-gradient(800px 420px at 92% 0%, rgba(31, 111, 139, 0.16), transparent 50%),
+    linear-gradient(165deg, #dce7ee 0%, #eaf1f5 45%, #e3ece8 100%);
+  min-height: 100vh;
+}
+
+* {
+  border-color: var(--line);
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-rise {
+  animation: rise-in 0.65s ease-out both;
+}
+
+.animate-rise-delay-1 {
+  animation: rise-in 0.7s ease-out 0.08s both;
+}
+
+.animate-rise-delay-2 {
+  animation: rise-in 0.75s ease-out 0.16s both;
+}
+
+.animate-rise-delay-3 {
+  animation: rise-in 0.8s ease-out 0.24s both;
+}
+
+.conc-bar {
+  transform-origin: left center;
+  animation: bar-grow 0.9s ease-out 0.3s both;
+}
