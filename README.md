@@ -1,40 +1,33 @@
-# Top 500 Companies Revenue Model
+# Contractor AI Agency — Revenue Model
 
-Dashboard and Google Sheet for U.S. top 500 company revenues (Fortune 500 2025 / FY2024).
+Professional recurring-revenue model for an agency selling **websites + AI voice agents** to contractors (inbound calls, lead capture, appointment booking).
 
-## Live links
-
-- **Web dashboard (local):** run below, then open `http://127.0.0.1:43211`
-- **[Google Sheet](https://docs.google.com/spreadsheets/d/1y1etk77QLopdToYomWSkjGGYxyCjy9WyvJtb26_r3NM/edit#gid=1516245268)**
-
-## Run locally
+## Run
 
 ```bash
 npm install
-npm run dev -- -p 43211 -H 127.0.0.1
+npm run dev
 ```
 
 Open [http://127.0.0.1:43211](http://127.0.0.1:43211).
 
+```bash
+npm test
+```
+
 ## What’s included
 
-### Web dashboard
-- Total revenue / company / employee KPIs
-- Concentration bars (Top 10 / 50 / 100 / rest)
-- Top 20 company and top industry charts
-- HQ state snapshot
-- Searchable Top 100 table
+- **Executive dashboard** — MRR, ARR run-rate, gross margin, OpEx, CAC/LTV estimates, churn, NRR, break-even, runway
+- **Pricing tiers** — Starter / Growth / Premium with unit economics and target-margin floors
+- **Cost to serve** — per-customer contribution (voice, hosting, support, processing)
+- **12-month driver-based forecast** — conservative / base / aggressive funnels
+- **CRM pipeline stub** — opportunities separate from booked MRR
+- **Docs** — `docs/AUDIT_REPORT.md`, `docs/FORMULAS.md`, `docs/ASSUMPTIONS.md`, `docs/SCORES.md`
 
-### Google Sheet tabs
-| Tab | Purpose |
-| --- | --- |
-| Dashboard | KPIs + charts |
-| Top 500 | Full company table |
-| By Industry / By State | Rollups |
-| Scenarios | Base / Bull / Bear growth (yellow inputs) |
-| About | Sources |
+## Important
 
-## Data
+Customer rows are **planning illustrations**, not live CRM data. Early-stage metrics are labeled. Edit assumptions in `src/data/assumptions.ts`.
 
-Salt Technologies AI Fortune 500 Companies Directory 2025 (CC BY 4.0).  
-https://www.salttechno.ai/datasets/fortune-500-companies-2025/
+## Google Sheet
+
+See `spreadsheet.json` for the operating workbook URL (created alongside this app). The prior Fortune 500 sheet is an archive only — it is **not** the agency model.

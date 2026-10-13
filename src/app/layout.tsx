@@ -13,9 +13,9 @@ const display = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Top 500 Revenue Model",
+  title: "Agency Revenue Model",
   description:
-    "Dashboard for U.S. top 500 company revenues (Fortune 500 2025 / FY2024).",
+    "Professional MRR, pricing, unit economics, and forecast for a contractor AI automation agency.",
 };
 
 export default function RootLayout({
@@ -25,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sans.variable} ${display.variable} font-[family-name:var(--font-sans)] antialiased`}>
+      <body
+        className={`${sans.variable} ${display.variable} font-[family-name:var(--font-sans)] antialiased`}
+      >
         {children}
       </body>
     </html>
