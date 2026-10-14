@@ -1,6 +1,8 @@
-# Contractor AI Agency — Revenue Model
+# Double Eagle Financial LLC — Revenue Expansion Model
 
-Professional recurring-revenue model for an agency selling **websites + AI voice agents** to contractors (inbound calls, lead capture, appointment booking).
+Bookkeeping retainers + AI lead capture for Oxford-area real estate professionals, property managers, and contractors.
+
+**Founder:** Ladarius Shuntez Jackson (QuickBooks ProAdvisor · analytics · AI automation)
 
 ## Run
 
@@ -9,25 +11,29 @@ npm install
 npm run dev
 ```
 
-Open [http://127.0.0.1:43211](http://127.0.0.1:43211).
+Open [http://127.0.0.1:43211](http://127.0.0.1:43211)
 
 ```bash
 npm test
 ```
 
-## What’s included
+## Grand Slam tiers
 
-- **Executive dashboard** — MRR, ARR run-rate, gross margin, OpEx, CAC/LTV estimates, churn, NRR, break-even, runway
-- **Pricing tiers** — Starter / Growth / Premium with unit economics and target-margin floors
-- **Cost to serve** — per-customer contribution (voice, hosting, support, processing)
-- **12-month driver-based forecast** — conservative / base / aggressive funnels
-- **CRM pipeline stub** — opportunities separate from booked MRR
-- **Docs** — `docs/AUDIT_REPORT.md`, `docs/FORMULAS.md`, `docs/ASSUMPTIONS.md`, `docs/SCORES.md`
+| Tier | Setup | MRR | Focus |
+|---|---|---|---|
+| The Foundation | $750 | $350 | QBO bookkeeping + reconciliations |
+| The Velocity Suite | $1,250 | $550 | + Q4 velocity / CFO-lite |
+| The Enterprise Alpha | $999 | $699 | Full financials + AI lead capture |
+
+**AI a la carte:** $499–$999 setup + $99–$149/mo (stack on Foundation/Velocity).
+
+## Docs
+
+- `docs/DOUBLE_EAGLE_PLAYBOOK.md` — full expansion playbook + scripts
+- `docs/FORMULAS.md` — MRR/ARR/recognition rules
+- `docs/ASSUMPTIONS.md` — verification checklist
+- `docs/AUDIT_REPORT.md` — prior model audit
 
 ## Important
 
-Customer rows are **planning illustrations**, not live CRM data. Early-stage metrics are labeled. Edit assumptions in `src/data/assumptions.ts`.
-
-## Google Sheet
-
-See `spreadsheet.json` for the operating workbook URL (created alongside this app). The prior Fortune 500 sheet is an archive only — it is **not** the agency model.
+Customer rows are planning illustrations until replaced with live QBO/CRM data. Edit drivers in `src/data/assumptions.ts`.

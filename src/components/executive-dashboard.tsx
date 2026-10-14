@@ -60,14 +60,14 @@ export function ExecutiveDashboard({
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--accent-deep)]">
-            Executive financial dashboard
+            Double Eagle Financial LLC
           </p>
           <h1 className="mt-2 font-[family-name:var(--font-display)] text-4xl tracking-tight text-[var(--ink)] md:text-5xl">
-            Revenue model
+            Revenue expansion model
           </h1>
           <p className="mt-2 max-w-2xl text-[var(--ink-soft)]">
-            Websites + AI voice agents for contractors — MRR, unit economics, forecast, and
-            pipeline in one operator view.
+            Bookkeeping retainers + AI lead capture for Oxford-area real estate pros, property
+            managers, and contractors — MRR, unit economics, forecast, and pipeline.
           </p>
         </div>
         <label className="text-sm text-[var(--ink-soft)]">
@@ -234,9 +234,9 @@ function PricingTable({ model }: { model: AgencyModel }) {
     <section className="rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-5 shadow-sm backdrop-blur">
       <h2 className="font-[family-name:var(--font-display)] text-2xl">Pricing & unit economics</h2>
       <p className="mt-1 mb-4 text-sm text-[var(--ink-soft)]">
-        Recommended packages for contractors. Prices are planning recommendations from delivery
-        economics + published market bands — not claimed universal standards. Costs flagged as
-        assumptions.
+        Grand Slam tiers: Foundation, Velocity Suite, Enterprise Alpha. AI Lead Capture stacks at
+        $499–$999 setup + $99–$149/mo. Costs are planning assumptions — verify against QBO and
+        invoices.
       </p>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">

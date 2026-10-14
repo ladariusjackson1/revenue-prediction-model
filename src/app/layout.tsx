@@ -13,9 +13,9 @@ const display = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Agency Revenue Model",
+  title: "Double Eagle Financial — Revenue Model",
   description:
-    "Professional MRR, pricing, unit economics, and forecast for a contractor AI automation agency.",
+    "Bookkeeping + AI lead capture revenue model for Double Eagle Financial LLC (Oxford RE, PMs, GCs).",
 };
 
 export default function RootLayout({

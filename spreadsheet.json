@@ -1,12 +1,10 @@
 {
-  "title": "Contractor AI Agency Revenue Model",
+  "title": "Contractor AI Agency Revenue Model → Double Eagle Financial",
   "spreadsheetId": "18If5aKkPq7oHIcoCXmdWEGfGcJ9jFrAHa-xmKNFz-aA",
   "url": "https://docs.google.com/spreadsheets/d/18If5aKkPq7oHIcoCXmdWEGfGcJ9jFrAHa-xmKNFz-aA/edit",
-  "archiveFortune500Sheet": {
-    "title": "Top 500 Companies Revenue Model (archive — not agency model)",
-    "spreadsheetId": "1y1etk77QLopdToYomWSkjGGYxyCjy9WyvJtb26_r3NM",
-    "url": "https://docs.google.com/spreadsheets/d/1y1etk77QLopdToYomWSkjGGYxyCjy9WyvJtb26_r3NM/edit"
-  },
-  "business": "Websites + AI voice agents for contractors",
+  "business": "Double Eagle Financial LLC",
+  "founder": "Ladarius Shuntez Jackson",
+  "niches": ["real estate professionals", "property managers", "general contractors"],
+  "market": "Oxford MS and surrounding",
   "mode": "planning_illustration"
 }

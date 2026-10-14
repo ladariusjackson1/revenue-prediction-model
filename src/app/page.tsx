@@ -13,8 +13,8 @@ export default function Page() {
     <main className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
       <ExecutiveDashboard initial={base} models={models} />
       <footer className="mt-10 border-t border-[var(--line)] pt-4 text-xs text-[var(--muted)]">
-        Agency revenue model for contractor websites + AI voice agents. Archive F500 sheet is not
-        the operating model. See docs/AUDIT_REPORT.md and docs/FORMULAS.md.
+        Double Eagle Financial LLC — playbook in docs/DOUBLE_EAGLE_PLAYBOOK.md · formulas in
+        docs/FORMULAS.md · edit drivers in src/data/assumptions.ts
       </footer>
     </main>
   );

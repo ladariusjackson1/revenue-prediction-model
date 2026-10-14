@@ -1,31 +1,22 @@
-# Assumption registry
+# Double Eagle — assumption registry
 
-All planning inputs live in `src/data/assumptions.ts` and illustrative CRM rows in `src/data/customers.ts`.
+Primary file: `src/data/assumptions.ts`  
+Playbook: `docs/DOUBLE_EAGLE_PLAYBOOK.md`
 
-## Provenance legend
+## Verify against real systems
 
-| Tag | Meaning |
-|---|---|
-| `actual` | From real invoices/CRM (none yet) |
-| `planning_illustration` | Demo rows so dashboards render |
-| `assumption` | Editable planning input — verify |
-
-## Cost assumptions to verify against invoices
-
-- Voice all-in $/min (default 0.13)
-- Hosting per site
-- Phone number
-- CRM allocation
-- Support hours × rate
-- Payment processing rate (2.9%)
-- Shared tools & OpEx lines
+- QBO retainer amounts and clean-up hours billed
+- AI platform + SMS/voice invoices (replace $0.10/min blend)
+- CRM seat cost (GHL or other)
+- Founder labor allocation and ad spend
 - Operating cash balance
+- Replace `src/data/customers.ts` illustrations with live clients
 
-## Unresolved dependencies / risks
+## AI SKUs
 
-1. No live CRM or billing system connected — metrics use illustrative customers.
-2. LTV/NRR/churn lack statistical history — labeled early-stage.
-3. Forecast ≠ actual until monthly close process exists.
-4. Tax treatment defaulted to 0.
-5. Annual billing cash timing (up-front cash vs monthly recognition) needs accounting policy confirmation.
-6. Overage billing not yet invoiced automatically — calculated from minutes × rate for contribution view.
+| SKU | Setup | MRR |
+|---|---|---|
+| Standard | $499 | $99 |
+| Pro (PMs) | $999 | $149 |
+
+Enterprise Alpha bundles AI into $999 setup + $699 MRR — do not double-bill the $149 AI SKU on the same account.

@@ -144,7 +144,7 @@ export function buildAgencyModel(scenario: ScenarioKey = "base") {
 
   const tierEconomics = tiers.map((tier) => {
     const assumedMinutes =
-      tier.id === "starter" ? 0 : tier.id === "growth" ? 200 : 450;
+      tier.id === "starter" ? 0 : tier.id === "growth" ? 0 : 150;
     const econ = tierUnitEconomics({ tier, unitCosts, assumedMonthlyMinutes: assumedMinutes });
     const minPrice = minPriceForMargin(econ.directMonthlyCost, assumptions.targetGrossMargin);
     return {

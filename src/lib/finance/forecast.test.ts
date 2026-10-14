@@ -23,6 +23,7 @@ describe("forecast", () => {
     const zeroClose = {
       ...assumptions.funnel.base,
       showToCloseRate: 0,
+      monthlyExpansionRate: 0,
     };
     const rows = buildForecast({
       funnel: zeroClose,
@@ -34,6 +35,6 @@ describe("forecast", () => {
       variableCostRateOfRecurring: 0.2,
     });
     expect(rows.every((r) => r.newCustomers === 0)).toBe(true);
-    expect(rows[2].endingMrr).toBeLessThan(2000); // churn still applies
+    expect(rows[2].endingMrr).toBeLessThan(2000); // churn still applies without expansion
   });
 });
