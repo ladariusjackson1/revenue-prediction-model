@@ -1,0 +1,33 @@
+name: ML CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - 01-daily-sales-forecast
+          - 02-customer-churn
+          - 03-lead-scoring
+          - 04-customer-segmentation
+          - 05-expense-classifier
+          - 06-mrr-forecast
+          - 07-appointment-noshow
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Generate / train / test
+        working-directory: projects/${{ matrix.project }}
+        run: |
+          if [ -f src/generate_data.py ]; then python -m src.generate_data; fi
+          if [ -f src/train.py ]; then python -m src.train; elif [ -f train.py ]; then python train.py; fi
+          pytest -q

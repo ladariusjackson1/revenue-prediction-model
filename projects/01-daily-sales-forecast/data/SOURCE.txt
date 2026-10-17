@@ -1,0 +1,11 @@
+Daily net merchandise sales derived from the Online Retail dataset.
+
+Source: Daqing Chen, Sai Laing Sain, and Kun Guo, UCI Machine Learning Repository.
+https://archive.ics.uci.edu/dataset/352/online+retail
+
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+The raw workbook is not included. Rebuild this file from the repository root:
+
+    python scripts/build_daily_revenue.py

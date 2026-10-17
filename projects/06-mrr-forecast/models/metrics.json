@@ -1,0 +1,21 @@
+{
+  "selected_model": "ridge",
+  "test_scores": [
+    {
+      "model": "seasonal_naive_lag12",
+      "mae": 538.33,
+      "r2": -34.408
+    },
+    {
+      "model": "ridge",
+      "mae": 58.95,
+      "r2": 0.3613
+    },
+    {
+      "model": "random_forest",
+      "mae": 186.94,
+      "r2": -4.2801
+    }
+  ],
+  "n_rows": 36
+}

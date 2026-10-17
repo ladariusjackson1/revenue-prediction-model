@@ -1,0 +1,6 @@
+{
+  "roc_auc": 0.7284,
+  "avg_precision": 0.8003,
+  "n_rows": 3000,
+  "win_rate": 0.5803
+}

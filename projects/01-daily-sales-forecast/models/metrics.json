@@ -1,0 +1,77 @@
+{
+  "target": "revenue",
+  "features": [
+    "lag_1",
+    "lag_7",
+    "lag_14",
+    "rolling_mean_7",
+    "rolling_mean_28",
+    "day_of_week"
+  ],
+  "n_calendar_days": 373,
+  "n_modeled_rows": 345,
+  "selection_rule": "Lowest validation MAE. Ties prefer the simpler model (seasonal naive, then ridge, then random forest). Test rows are not used for selection or fitting.",
+  "selected_model": "random_forest",
+  "trained_through": "2011-09-30",
+  "periods": {
+    "train": {
+      "rows": 207,
+      "start": "2010-12-29",
+      "end": "2011-07-23"
+    },
+    "validation": {
+      "rows": 69,
+      "start": "2011-07-24",
+      "end": "2011-09-30"
+    },
+    "test": {
+      "rows": 69,
+      "start": "2011-10-01",
+      "end": "2011-12-08"
+    }
+  },
+  "validation": {
+    "seasonal_naive": {
+      "mae": 11593.1,
+      "rmse": 17978.33,
+      "r2": 0.1667
+    },
+    "ridge": {
+      "mae": 11007.89,
+      "rmse": 16006.22,
+      "r2": 0.3395
+    },
+    "random_forest": {
+      "mae": 10486.13,
+      "rmse": 16033.32,
+      "r2": 0.3373
+    }
+  },
+  "test": {
+    "seasonal_naive": {
+      "mae": 12283.78,
+      "rmse": 17066.0,
+      "r2": 0.5076
+    },
+    "ridge": {
+      "mae": 14670.54,
+      "rmse": 19326.25,
+      "r2": 0.3686
+    },
+    "random_forest": {
+      "mae": 11629.44,
+      "rmse": 16509.5,
+      "r2": 0.5392
+    }
+  },
+  "hyperparameters": {
+    "ridge_alpha": 1.0,
+    "random_forest": {
+      "n_estimators": 300,
+      "max_depth": 6,
+      "min_samples_leaf": 5,
+      "max_features": 1.0,
+      "random_state": 0
+    }
+  }
+}

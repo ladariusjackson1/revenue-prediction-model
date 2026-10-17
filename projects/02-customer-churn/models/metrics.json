@@ -1,0 +1,28 @@
+{
+  "selected_model": "logreg",
+  "test_metrics": [
+    {
+      "model": "logreg",
+      "roc_auc": 0.7411,
+      "avg_precision": 0.3042,
+      "f1": 0.0941,
+      "accuracy": 0.8768
+    },
+    {
+      "model": "rf",
+      "roc_auc": 0.7286,
+      "avg_precision": 0.2969,
+      "f1": 0.0,
+      "accuracy": 0.8752
+    },
+    {
+      "model": "gbm",
+      "roc_auc": 0.702,
+      "avg_precision": 0.2547,
+      "f1": 0.1075,
+      "accuracy": 0.8672
+    }
+  ],
+  "n_rows": 2500,
+  "churn_rate": 0.1252
+}
