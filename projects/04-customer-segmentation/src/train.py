@@ -21,7 +21,10 @@ def train(k: int = 3) -> dict:
         DATA.parent.mkdir(parents=True, exist_ok=True)
         generate().to_csv(DATA, index=False)
     df = pd.read_csv(DATA)
-    X = StandardScaler().fit_transform(df[FEATURES])
+    # KMeans sees standardized columns. The scaler has to be saved with the
+    # clusterer or a later predict() on raw RFM values uses the wrong space.
+    scaler = StandardScaler()
+    X = scaler.fit_transform(df[FEATURES])
     km = KMeans(n_clusters=k, n_init=20, random_state=0)
     labels = km.fit_predict(X)
     payload = {
@@ -32,7 +35,7 @@ def train(k: int = 3) -> dict:
         "n_rows": int(len(df)),
     }
     MODEL.parent.mkdir(parents=True, exist_ok=True)
-    joblib.dump({"kmeans": km, "features": FEATURES}, MODEL)
+    joblib.dump({"kmeans": km, "scaler": scaler, "features": FEATURES}, MODEL)
     METRICS.write_text(json.dumps(payload, indent=2))
     print(json.dumps(payload, indent=2))
     return payload
