@@ -1,0 +1,11 @@
+[run]
+omit =
+    */tests/*
+    */scripts/*
+disable_warnings =
+    module-not-imported
+
+[report]
+show_missing = True
+skip_empty = True
+precision = 0

@@ -2,6 +2,9 @@
   "name": "agency-revenue-model",
   "version": "0.2.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "next dev -p 43211 -H 127.0.0.1",
     "build": "next build",

@@ -1,3 +1,8 @@
+# This file is not used by the portfolio repository. GitHub Actions only
+# loads workflows from the repository-root .github/workflows directory.
+# The portfolio workflow is /.github/workflows/ml-ci.yml, which tests all
+# seven projects. This copy remains so the project still documents a
+# single-folder run if it is split out on its own.
 name: Tests
 
 on:

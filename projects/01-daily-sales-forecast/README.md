@@ -98,7 +98,7 @@ python -m streamlit run app.py
 
 `pytest` checks the cleaning rules, that features do not depend on same-day or future sales, that the split is chronological, that the naive forecast is last week's sales, that the ridge scaler is fit only on the pre-test window, that `models/metrics.json` matches a fresh run, and that the Streamlit app renders a forecast from the saved model.
 
-GitHub Actions (`.github/workflows/tests.yml`) installs `requirements.txt` and runs `pytest` on Python 3.12.
+In this portfolio repo, GitHub Actions (`.github/workflows/ml-ci.yml` at the repository root) installs the root `requirements.txt` and runs these tests with the other six projects on Python 3.12. The workflow file inside this folder is only for a standalone checkout.
 
 ## Layout
 

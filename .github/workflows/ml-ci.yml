@@ -6,28 +6,65 @@ on:
   pull_request:
 
 jobs:
+  # One job, seven projects. A matrix here used to make it easy to miss that
+  # only project 01 had a meaningful test run. The shell script refuses to
+  # finish unless every directory below is tested.
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project:
-          - 01-daily-sales-forecast
-          - 02-customer-churn
-          - 03-lead-scoring
-          - 04-customer-segmentation
-          - 05-expense-classifier
-          - 06-mrr-forecast
-          - 07-appointment-noshow
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
       - name: Install
-        run: pip install -r requirements.txt
-      - name: Generate / train / test
-        working-directory: projects/${{ matrix.project }}
+        run: python -m pip install -r requirements.txt
+      - name: Test all 7 projects and write the coverage report
         run: |
-          if [ -f src/generate_data.py ]; then python -m src.generate_data; fi
-          if [ -f src/train.py ]; then python -m src.train; elif [ -f train.py ]; then python train.py; fi
-          pytest -q
+          bash scripts/ci_ml.sh \
+            01-daily-sales-forecast \
+            02-customer-churn \
+            03-lead-scoring \
+            04-customer-segmentation \
+            05-expense-classifier \
+            06-mrr-forecast \
+            07-appointment-noshow
+      - name: Committed coverage report matches this run
+        run: git diff --exit-code -- docs/COVERAGE.md docs/badges/coverage.svg
+      - name: Coverage summary
+        run: |
+          {
+            echo "## ML coverage"
+            echo
+            cat docs/COVERAGE.md
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            htmlcov/
+            coverage.xml
+            docs/COVERAGE.md
+            docs/badges/coverage.svg
+          if-no-files-found: error
+
+  dashboard:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/double-eagle-revenue-model
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/double-eagle-revenue-model/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build
