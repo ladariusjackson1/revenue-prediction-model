@@ -14,7 +14,7 @@ Daily net sales are aggregated from the [Online Retail](https://archive.ics.uci.
 - **Partial last day:** the workbook ends at 12:50 on 9 December 2011, so that date is dropped. Days with no kept invoices, including every Saturday in this extract, are stored as 0.
 - **What is not in the file:** no customer names, customer ids, or invoice lines. The committed table is `date` and `revenue` only.
 
-`data/daily_revenue.csv` is the file the model trains on (total net sales £9,762,760.55, 69 zero-sales days). Rebuild it from the UCI workbook with:
+`data/daily_revenue.csv` is the file the model trains on (total net sales £9,762,760.55, 69 zero-sales days). The same definition is the SQL ledger in [`finance/`](../../finance/): raw invoice lines, a disposition for every row, and a daily mart that matches this file to the penny. Rebuild the CSV from the UCI workbook with:
 
 ```bash
 python scripts/build_daily_revenue.py
@@ -98,7 +98,7 @@ python -m streamlit run app.py
 
 `pytest` checks the cleaning rules, that features do not depend on same-day or future sales, that the split is chronological, that the naive forecast is last week's sales, that the ridge scaler is fit only on the pre-test window, that `models/metrics.json` matches a fresh run, and that the Streamlit app renders a forecast from the saved model.
 
-GitHub Actions (`.github/workflows/tests.yml`) installs `requirements.txt` and runs `pytest` on Python 3.12.
+In this portfolio repo, GitHub Actions (`.github/workflows/ml-ci.yml` at the repository root) installs the root `requirements.txt` and runs these tests with the other six projects on Python 3.12. The workflow file inside this folder is only for a standalone checkout.
 
 ## Layout
 

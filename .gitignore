@@ -8,6 +8,12 @@ venv/
 .mypy_cache/
 *.egg-info/
 .ruff_cache/
+.coverage
+.coverage.*
+.coverage-data/
+htmlcov/
+coverage.xml
+coverage.json
 
 # Models / artifacts (keep metrics.json)
 *.joblib
@@ -16,6 +22,7 @@ venv/
 models/*.joblib
 **/models/*.joblib
 **/data/raw/
+finance/build/
 
 # Node / Next
 node_modules/

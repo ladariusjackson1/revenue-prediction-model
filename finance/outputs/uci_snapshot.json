@@ -1,0 +1,382 @@
+{
+  "source_name": "UCI Online Retail",
+  "citation": "Daqing Chen, Sai Laing Sain, and Kun Guo (2012). Data mining for the online retail industry: A case study of RFM model-based customer segmentation using data mining. Journal of Database Marketing and Customer Strategy Management, 19(3).",
+  "source_url": "https://archive.ics.uci.edu/dataset/352/online+retail",
+  "download_url": "https://archive.ics.uci.edu/static/public/352/online+retail.zip",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "currency": "GBP",
+  "xlsx_sha256": "43465a06f2ccf7c8b5bd2892bc7defb52f97487934fe93b16ae4c3936424676d",
+  "xlsx_bytes": 23715344,
+  "retrieved_on": "2026-11-06",
+  "raw_rows": 541909,
+  "start_date": "2010-12-01",
+  "end_date": "2011-12-08",
+  "net_pence": 976276055,
+  "gross_pence": 1007292035,
+  "returns_pence": 0,
+  "cancellations_pence": -31015980,
+  "duplicate_extra_pence": 2137110,
+  "days": 373,
+  "zero_days": 69,
+  "duplicate_bridge": {
+    "net_including_duplicate_extras_pence": 976276055,
+    "duplicate_extra_pence": 2137110,
+    "net_if_extras_removed_pence": 974138945
+  },
+  "movements": [
+    {
+      "movement": "cancellation_invoice",
+      "lines": 8698,
+      "amount_pence": -31015980
+    },
+    {
+      "movement": "sale",
+      "lines": 526107,
+      "amount_pence": 1007292035
+    }
+  ],
+  "identified_customers": 4361,
+  "active_one_month_later": 1122,
+  "partial_rows": 1632,
+  "non_product_rows": 2983,
+  "bad_price_rows": 2485,
+  "unparseable_rows": 4,
+  "missing_customer_rows": 130547,
+  "missing_customer_pence": 149172313,
+  "adjustment_invoice_rows": 3,
+  "adjustment_invoice_pence": -1106206,
+  "negative_qty_bad_price_rows": 1324,
+  "negative_qty_non_product_rows": 12,
+  "negative_qty_kept_rows": 0,
+  "countries": [
+    {
+      "country": "United Kingdom",
+      "net_merchandise_pence": 827639745,
+      "line_count": 489885,
+      "share_bps": 8477,
+      "revenue_rank": 1
+    },
+    {
+      "country": "Netherlands",
+      "net_merchandise_pence": 28347954,
+      "line_count": 2326,
+      "share_bps": 290,
+      "revenue_rank": 2
+    },
+    {
+      "country": "EIRE",
+      "net_merchandise_pence": 25966346,
+      "line_count": 8071,
+      "share_bps": 265,
+      "revenue_rank": 3
+    },
+    {
+      "country": "Germany",
+      "net_merchandise_pence": 19926268,
+      "line_count": 9017,
+      "share_bps": 204,
+      "revenue_rank": 4
+    },
+    {
+      "country": "France",
+      "net_merchandise_pence": 18191394,
+      "line_count": 8219,
+      "share_bps": 186,
+      "revenue_rank": 5
+    },
+    {
+      "country": "Australia",
+      "net_merchandise_pence": 13699000,
+      "line_count": 1254,
+      "share_bps": 140,
+      "revenue_rank": 6
+    },
+    {
+      "country": "Switzerland",
+      "net_merchandise_pence": 5250535,
+      "line_count": 1968,
+      "share_bps": 53,
+      "revenue_rank": 7
+    },
+    {
+      "country": "Spain",
+      "net_merchandise_pence": 5176520,
+      "line_count": 2467,
+      "share_bps": 53,
+      "revenue_rank": 8
+    },
+    {
+      "country": "Belgium",
+      "net_merchandise_pence": 3646932,
+      "line_count": 1955,
+      "share_bps": 37,
+      "revenue_rank": 9
+    },
+    {
+      "country": "Japan",
+      "net_merchandise_pence": 3541979,
+      "line_count": 355,
+      "share_bps": 36,
+      "revenue_rank": 10
+    },
+    {
+      "country": "Sweden",
+      "net_merchandise_pence": 3517691,
+      "line_count": 437,
+      "share_bps": 36,
+      "revenue_rank": 11
+    },
+    {
+      "country": "Norway",
+      "net_merchandise_pence": 2965427,
+      "line_count": 993,
+      "share_bps": 30,
+      "revenue_rank": 12
+    },
+    {
+      "country": "Portugal",
+      "net_merchandise_pence": 2687152,
+      "line_count": 1475,
+      "share_bps": 27,
+      "revenue_rank": 13
+    },
+    {
+      "country": "Channel Islands",
+      "net_merchandise_pence": 1993629,
+      "line_count": 753,
+      "share_bps": 20,
+      "revenue_rank": 14
+    },
+    {
+      "country": "Finland",
+      "net_merchandise_pence": 1830354,
+      "line_count": 653,
+      "share_bps": 18,
+      "revenue_rank": 15
+    },
+    {
+      "country": "Denmark",
+      "net_merchandise_pence": 1804214,
+      "line_count": 375,
+      "share_bps": 18,
+      "revenue_rank": 16
+    },
+    {
+      "country": "Italy",
+      "net_merchandise_pence": 1527634,
+      "line_count": 783,
+      "share_bps": 15,
+      "revenue_rank": 17
+    },
+    {
+      "country": "Cyprus",
+      "net_merchandise_pence": 1293129,
+      "line_count": 619,
+      "share_bps": 13,
+      "revenue_rank": 18
+    },
+    {
+      "country": "Hong Kong",
+      "net_merchandise_pence": 994204,
+      "line_count": 280,
+      "share_bps": 10,
+      "revenue_rank": 19
+    },
+    {
+      "country": "Singapore",
+      "net_merchandise_pence": 912039,
+      "line_count": 215,
+      "share_bps": 9,
+      "revenue_rank": 20
+    },
+    {
+      "country": "Austria",
+      "net_merchandise_pence": 869832,
+      "line_count": 387,
+      "share_bps": 8,
+      "revenue_rank": 21
+    },
+    {
+      "country": "Israel",
+      "net_merchandise_pence": 790782,
+      "line_count": 297,
+      "share_bps": 8,
+      "revenue_rank": 22
+    },
+    {
+      "country": "Poland",
+      "net_merchandise_pence": 685314,
+      "line_count": 336,
+      "share_bps": 7,
+      "revenue_rank": 23
+    },
+    {
+      "country": "Unspecified",
+      "net_merchandise_pence": 474979,
+      "line_count": 446,
+      "share_bps": 4,
+      "revenue_rank": 24
+    },
+    {
+      "country": "Greece",
+      "net_merchandise_pence": 442552,
+      "line_count": 142,
+      "share_bps": 4,
+      "revenue_rank": 25
+    },
+    {
+      "country": "Iceland",
+      "net_merchandise_pence": 431000,
+      "line_count": 182,
+      "share_bps": 4,
+      "revenue_rank": 26
+    },
+    {
+      "country": "Canada",
+      "net_merchandise_pence": 311544,
+      "line_count": 150,
+      "share_bps": 3,
+      "revenue_rank": 27
+    },
+    {
+      "country": "Malta",
+      "net_merchandise_pence": 198047,
+      "line_count": 123,
+      "share_bps": 2,
+      "revenue_rank": 28
+    },
+    {
+      "country": "United Arab Emirates",
+      "net_merchandise_pence": 186478,
+      "line_count": 67,
+      "share_bps": 1,
+      "revenue_rank": 29
+    },
+    {
+      "country": "USA",
+      "net_merchandise_pence": 173092,
+      "line_count": 291,
+      "share_bps": 1,
+      "revenue_rank": 30
+    },
+    {
+      "country": "Lebanon",
+      "net_merchandise_pence": 169388,
+      "line_count": 45,
+      "share_bps": 1,
+      "revenue_rank": 31
+    },
+    {
+      "country": "Lithuania",
+      "net_merchandise_pence": 166106,
+      "line_count": 35,
+      "share_bps": 1,
+      "revenue_rank": 32
+    },
+    {
+      "country": "European Community",
+      "net_merchandise_pence": 115075,
+      "line_count": 58,
+      "share_bps": 1,
+      "revenue_rank": 33
+    },
+    {
+      "country": "Brazil",
+      "net_merchandise_pence": 114360,
+      "line_count": 32,
+      "share_bps": 1,
+      "revenue_rank": 34
+    },
+    {
+      "country": "RSA",
+      "net_merchandise_pence": 100231,
+      "line_count": 57,
+      "share_bps": 1,
+      "revenue_rank": 35
+    },
+    {
+      "country": "Czech Republic",
+      "net_merchandise_pence": 67172,
+      "line_count": 28,
+      "share_bps": 0,
+      "revenue_rank": 36
+    },
+    {
+      "country": "Bahrain",
+      "net_merchandise_pence": 54840,
+      "line_count": 19,
+      "share_bps": 0,
+      "revenue_rank": 37
+    },
+    {
+      "country": "Saudi Arabia",
+      "net_merchandise_pence": 13117,
+      "line_count": 10,
+      "share_bps": 0,
+      "revenue_rank": 38
+    }
+  ],
+  "quality_checks": [
+    {
+      "check_name": "calendar_has_no_gaps",
+      "status": "pass",
+      "observed": 0,
+      "detail": "Count of consecutive daily-mart dates more than one day apart."
+    },
+    {
+      "check_name": "finding_bad_price",
+      "status": "observed",
+      "observed": 2485,
+      "detail": "Product rows with a parsed price of zero or less."
+    },
+    {
+      "check_name": "finding_duplicate_extras",
+      "status": "observed",
+      "observed": 2137110,
+      "detail": "Exact duplicate extras still included in the forecast-matching net, in pence of those extras."
+    },
+    {
+      "check_name": "finding_missing_customer",
+      "status": "observed",
+      "observed": 130547,
+      "detail": "Kept merchandise rows with a blank customer id. They stay in revenue and out of cohorts."
+    },
+    {
+      "check_name": "finding_non_product",
+      "status": "observed",
+      "observed": 2983,
+      "detail": "Rows whose stock code does not start with a digit (postage, fees, manual adjustments, gift vouchers, letter-prefixed goods)."
+    },
+    {
+      "check_name": "finding_partial_day",
+      "status": "observed",
+      "observed": 1632,
+      "detail": "Rows on a final calendar day whose last timestamp is before 16:00."
+    },
+    {
+      "check_name": "finding_unparseable",
+      "status": "observed",
+      "observed": 4,
+      "detail": "Rows dropped because the date, quantity, or price could not be parsed. Symbols, comma decimals, and more than two price decimals land here."
+    },
+    {
+      "check_name": "kept_amounts_not_null",
+      "status": "pass",
+      "observed": 0,
+      "detail": "Kept merchandise rows with a null line amount."
+    },
+    {
+      "check_name": "recon_components_equal_net",
+      "status": "pass",
+      "observed": 0,
+      "detail": "gross_sales_pence + returns_pence + cancellations_pence - net_merchandise_pence across the calendar."
+    },
+    {
+      "check_name": "recon_lines_equal_daily",
+      "status": "pass",
+      "observed": 0,
+      "detail": "Sum of kept line pence minus sum of daily net pence. Zero means the mart ties to the ledger."
+    }
+  ]
+}
