@@ -68,3 +68,17 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
+
+  revenue-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pytest
+        run: python -m pip install pytest
+      - name: Test the ledger offline and rebuild the explorer
+        run: python -m finance.run
+      - name: Explorer still matches the committed snapshot
+        run: git diff --exit-code -- docs/revenue-quality/index.html

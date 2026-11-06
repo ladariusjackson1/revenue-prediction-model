@@ -7,6 +7,20 @@ Machine learning projects for revenue, retention, and operations — plus the **
 [![ML CI](https://github.com/ladariusjackson1/revenue-prediction-model/actions/workflows/ml-ci.yml/badge.svg)](https://github.com/ladariusjackson1/revenue-prediction-model/actions/workflows/ml-ci.yml)
 [![Statement coverage](docs/badges/coverage.svg)](docs/COVERAGE.md)
 
+## Revenue quality (the case study)
+
+The forecasting projects sit on top of a prior question: is the revenue number defensible?
+
+[`finance/`](finance/) loads the public [UCI Online Retail](https://archive.ics.uci.edu/dataset/352/online+retail) invoice extract (CC BY 4.0) into SQLite as raw text, a typed staging table, and marts. Merchandise net sales are **£9,762,760.55** for 1 Dec 2010–8 Dec 2011. That daily mart matches project 01's series to the penny. Cancellation invoices reduce it by £310,159.80. Exact duplicate extras of £21,371.10 are kept in that total and shown separately. 130,547 kept lines have no customer id (£1,491,723.13); they stay in revenue and out of the cohort. 4,361 identified customers, 1,122 of whom also buy in the following month.
+
+This is a public research extract, not a client ledger and not an ROI. The 19-row file under `finance/fixtures/` is a planted test fixture, not a sample of the workbook. Provenance, the sha256, and the rebuild rule are in [`finance/PROVENANCE.md`](finance/PROVENANCE.md).
+
+```bash
+python -m finance.run
+```
+
+That command needs no download. It tests duplicate handling, returns, cancellations, bad prices, a partial final day, idempotent reruns, and a reconciliation that fails if a daily total is edited. The static explorer is [`docs/revenue-quality/index.html`](docs/revenue-quality/index.html) (open the file; it does not call a server). Narrative, dictionary, and a short interview walkthrough: [`finance/README.md`](finance/README.md).
+
 ## Key results
 
 These figures come from the training scripts in this repo. Project 01 is the public UCI Online Retail daily series. Projects 02–07 are synthetic tables with fixed random seeds. Re-running `python -m src.train` (or `python train.py` for project 01) reprints the same scores, and the tests check them.
@@ -135,9 +149,10 @@ The first build downloads the DM Sans and Fraunces font files through `next/font
 
 ## CI
 
-[`.github/workflows/ml-ci.yml`](.github/workflows/ml-ci.yml) does two jobs:
+[`.github/workflows/ml-ci.yml`](.github/workflows/ml-ci.yml) does three jobs:
 
 - **test** — Python 3.12, root `requirements.txt`, then `scripts/ci_ml.sh` for all seven projects (generate, train, pytest, combined coverage). The job fails if `docs/COVERAGE.md` or the coverage badge disagrees with that run. The HTML report is the `coverage-report` artifact.
+- **revenue-quality** — `python -m finance.run`. Offline fixture tests for the ledger, then a check that the static explorer still matches the committed UCI snapshot.
 - **dashboard** — `npm ci`, `npm test`, and `npm run build` in `apps/double-eagle-revenue-model`.
 
 Statement coverage for the seven projects — data generation, training, and pytest — is written up in [`docs/COVERAGE.md`](docs/COVERAGE.md).

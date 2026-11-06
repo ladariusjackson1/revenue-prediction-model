@@ -22,6 +22,7 @@ coverage.json
 models/*.joblib
 **/models/*.joblib
 **/data/raw/
+finance/build/
 
 # Node / Next
 node_modules/
